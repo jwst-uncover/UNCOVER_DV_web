@@ -1,0 +1,62 @@
+name: Publish Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-docker:
+    runs-on: ubuntu-latest
+    name: Publish Docker
+
+    environment:
+      name: ghcr
+      url: https://github.com/sedonaprice/UNCOVER_DV_web/pkgs/container/uncover_dv
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Define Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+        with:
+          images: ghcr.io/sedonaprice/uncover_dv
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ github.sha }}
+          labels: |
+            org.opencontainers.image.title="JWST Uncover"
+            org.opencontainers.image.description="Web frontend for the JWST Uncover project."
+            org.opencontainers.image.url="https://github.com/sedonaprice/UNCOVER_DV_web"
+            org.opencontainers.image.source="https://github.com/sedonaprice/UNCOVER_DV_web"
+            org.opencontainers.image.authors="The JWST Uncover Team"
+            org.opencontainers.image.revision="${{ github.sha }}"
+            org.opencontainers.image.vendor="University of Pittsburgh"
+            org.opencontainers.image.ref.name="ghcr.io/sedonaprice/uncover_dv:${{ github.sha }}"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          platforms: linux/amd64,linux/arm64
