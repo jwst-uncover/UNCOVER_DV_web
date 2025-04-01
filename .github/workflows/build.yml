@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  publish-docker:
+  build-docker:
     runs-on: ubuntu-latest
     name: Build Docker
 
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Publish image
+      - name: Build image
         uses: docker/build-push-action@v6
         with:
           context: .
