@@ -17,7 +17,7 @@ jobs:
 
     environment:
       name: ghcr
-      url: https://github.com/jwst-uncover/UNCOVER_DV_web/pkgs/container/uncover_dv
+      url: https://github.com/jwst-uncover/UNCOVER_DV_web/pkgs/container/uncover-dv
 
     steps:
       - name: Checkout source
@@ -36,19 +36,19 @@ jobs:
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
         with:
-          images: ghcr.io/jwst-uncover/uncover_dv
+          images: ghcr.io/jwst-uncover/uncover-dv
           tags: |
             type=raw,value=${{ github.sha }}
             type=raw,value=latest
           labels: |
-            org.opencontainers.image.title="JWST Uncover"
+            org.opencontainers.image.title="JWST UNCOVER"
             org.opencontainers.image.description="Web frontend for the JWST UNCOVER data viewer."
             org.opencontainers.image.url="https://github.com/jwst-uncover/UNCOVER_DV_web"
             org.opencontainers.image.source="https://github.com/jwst-uncover/UNCOVER_DV_web"
-            org.opencontainers.image.authors="The JWST Uncover Team"
+            org.opencontainers.image.authors="The JWST UNCOVER Team"
             org.opencontainers.image.revision="${{ github.sha }}"
             org.opencontainers.image.vendor="University of Pittsburgh"
-            org.opencontainers.image.ref.name="ghcr.io/jwst-uncover/uncover_dv:${{ github.sha }}"
+            org.opencontainers.image.ref.name="ghcr.io/jwst-uncover/uncover-dv:${{ github.sha }}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
