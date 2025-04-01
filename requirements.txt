@@ -1,8 +1,8 @@
 numpy
 pandas
 astropy
-dash==2.9.2
-dash-ag-grid===31.3.0
+dash
+dash-ag-grid
 waitress
 flask-caching
 redis

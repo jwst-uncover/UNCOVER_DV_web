@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python
 WORKDIR /usr/local/app
 
 # Disable Python byte code caching and output buffering
