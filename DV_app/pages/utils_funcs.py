@@ -1,6 +1,7 @@
 # import dash
 
 from dash import html, dcc
+import dash_bootstrap_components as dbc
 import numpy as np
 
 _FILTERS_RGB_TUPLES = [
@@ -355,5 +356,67 @@ def _make_info_entries(
 
     else:
         raise ValueError
+
+    return entries
+
+
+def _make_nextprev_nav(df, ind, dict_keys=None, pathbase_link=None):
+    objid = df[dict_keys["id"]][ind]
+
+    objid_p = None
+    objid_n = None
+    if ind > 0:
+        objid_p = df[dict_keys["id"]][ind - 1]
+
+    if ind < (len(df) - 1):
+        objid_n = df[dict_keys["id"]][ind + 1]
+
+    entries = [
+        html.H5(
+            f"Overview: {objid}",
+            className="me-1",
+        )
+    ]
+
+    if objid_p is not None:
+        entries.append(
+            dbc.Button(
+                f"Prev: {objid_p}",
+                href=f"{pathbase_link}{objid_p}.html",
+                color="primary",
+                outline=True,
+                className="me-1 ms-3",
+            )
+        )
+    else:
+        entries.append(
+            dbc.Button(
+                "Prev",
+                color="primary",
+                outline=True,
+                disabled=True,
+                className="me-1 ms-3",
+            )
+        )
+    if objid_n is not None:
+        entries.append(
+            dbc.Button(
+                f"Next: {objid_n}",
+                href=f"{pathbase_link}{objid_n}.html",
+                color="primary",
+                outline=True,
+                className="me-1",
+            )
+        )
+    else:
+        entries.append(
+            dbc.Button(
+                "Next",
+                color="primary",
+                outline=True,
+                disabled=True,
+                className="me-1",
+            )
+        )
 
     return entries

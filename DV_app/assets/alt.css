@@ -1,7 +1,30 @@
 :root {
     --hover: #fd7d1438; 
     --sel: #fd7d147b;
+    /* --link-color: #0000EE; */
+    /* --link-color: rgb(239, 127, 16);  */
+    --link-color: rgb(209, 104, 0); 
 }
+
+
+/*   
+  :link {
+    color: #0000EE; 
+  }
+  :visited {
+    color: #551A8B; 
+  }
+
+  :link:active, :visited:active { color: #FF0000; } */
+
+  :link {
+    color: var(--link-color); 
+  }
+  :visited {
+    color: var(--link-color); 
+  }
+
+  :link:active, :visited:active { color: var(--link-color); }
    
    /* table {
      border-collapse: separate; 
@@ -21,9 +44,19 @@
 }
 
 
+h2 {
+  margin-top: 0.75rem!important;
+  letter-spacing: -.025rem!important;
+}
+
+.btn {
+  display: inline!important; 
+}
+
 .navbar {
   font-size: 2rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
+  margin-top: 0.6rem;
 }
 
 .navbar_small {
@@ -44,4 +77,56 @@
 
 .navbarhoriz a:last-child {
   border-right: none;
+}
+
+.navnextprev {
+  align-items: center;
+  /* align-items: anchor-center; */
+}
+
+.navnextprev h5 {
+  margin-top: 0!important;
+  margin-bottom: 0!important;
+  padding-top: 0.6rem!important;
+  padding-bottom: 0.6rem!important;
+}
+
+.navnextprev a {
+  /* margin-x: 0.5rem;  */
+  display: inline!important; 
+  padding-left: 0.5rem!important;
+  padding-right: 0.5rem!important;
+  /* vertical-align: middle; */
+  /* vertical-align: baseline!important; */
+}
+
+
+/* .navnextprev a:visited {
+  color: #0000EE; 
+}
+
+.navnextprev a :link:active, .navnextprev a :visited:active { color: #0000EE; } */
+
+
+.navnextprev a:hover {
+  text-decoration: none;
+}
+
+
+
+.navnextprev .btn {
+    --bs-btn-color: var(--link-color);
+    --bs-btn-border-color: var(--link-color);
+    /* --bs-btn-hover-color: #fff; */
+    --bs-btn-hover-bg: var(--link-color);
+    --bs-btn-hover-border-color: var(--link-color);
+    /* --bs-btn-focus-shadow-rgb: 13,110,253; */
+    /* --bs-btn-active-color: #fff; */
+    --bs-btn-active-bg: var(--link-color);
+    --bs-btn-active-border-color: var(--link-color);
+    /* --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); */
+    --bs-btn-disabled-color: var(--link-color);
+    /* --bs-btn-disabled-bg: transparent; */
+    --bs-btn-disabled-border-color: var(--link-color);
+    /* --bs-gradient: none; */
 }

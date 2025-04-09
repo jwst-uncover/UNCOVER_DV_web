@@ -17,6 +17,7 @@ _DICT_TABLE_ENTRIES = {
         "from": "phot",
         "header": "id",
         "cellRenderer": "OverviewPhotLink",
+        "format": "d",
     },
     "z_phot_50": {
         "from": "sps",
@@ -56,6 +57,7 @@ _DICT_TABLE_ENTRIES = {
         "from": "sample_spec",
         "cellRenderer": "OverviewSpecLink",
         "catkey": "specid",
+        "format": "d",
     },
     "z_spec": {
         "from": "spec",

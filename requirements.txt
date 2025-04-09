@@ -3,6 +3,7 @@ pandas
 astropy
 dash
 dash-ag-grid
+dash-bootstrap-components
 waitress
 flask-caching
 redis

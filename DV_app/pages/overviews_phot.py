@@ -16,6 +16,7 @@ from .utils_funcs import (
     # _make_info_entry,
     # _make_info_entry_link,
     _make_info_entries,
+    _make_nextprev_nav,
 )
 
 from .file_io import global_store
@@ -284,6 +285,13 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
             objid_phot, imgtype=imgtype
         )
 
+    entries_overview_nextprev = _make_nextprev_nav(
+        df,
+        ind,
+        dict_keys=_DICT_KEYS,
+        pathbase_link="/overviews/phot/",
+    )
+
     entries_galprops = {}
 
     for jj, keys_list in enumerate(_KEYS_INFO):
@@ -327,7 +335,11 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                     html.Div(
                         className="column",
                         children=[
-                            html.H5(f"Overview: {objid_phot}"),
+                            # html.H5(f"Overview: {objid_phot}"),
+                            html.Div(
+                                entries_overview_nextprev,
+                                className="d-grid gap-1 d-flex navnextprev",
+                            ),
                             html.Table(
                                 className="nopad",
                                 children=[

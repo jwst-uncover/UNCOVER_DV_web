@@ -140,6 +140,7 @@
     /* font-size: 1.5em; 
     line-height: 1.6; */
     /* font-size: 1em;  */
+    margin: 8px; 
     font-size: 1.2em; 
     line-height: 1;
     font-weight: 400;
@@ -199,7 +200,7 @@ h1 {
         /* color: #ffa45a;  */
         text-decoration: underline;
     }
-  
+
   /* Buttons
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
   .button,

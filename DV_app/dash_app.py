@@ -2,6 +2,7 @@ import dash
 import os
 import argparse
 from dash import Dash, html
+import dash_bootstrap_components as dbc
 
 
 _PAGE_FLAVOR = "Home"
@@ -14,7 +15,11 @@ def setup_all(
     page_flavor=_PAGE_FLAVOR,
     vers=_VERS,
 ):
-    external_stylesheets = ["assets/dash_app.css", "assets/alt.css"]
+    external_stylesheets = [
+        dbc.themes.BOOTSTRAP,
+        "assets/dash_app.css",
+        "assets/alt.css",
+    ]
 
     app = Dash(
         __name__,
