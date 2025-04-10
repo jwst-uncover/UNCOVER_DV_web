@@ -28,7 +28,7 @@ dash.register_page(
 
 
 _PAGE_FLAVOR = "Spec Sample"
-_VERS = "v1.1"
+_VERS = "v1.3"
 
 _VERS_PHOT = "DR3"
 

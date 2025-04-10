@@ -9,7 +9,7 @@ from .utils_funcs import navbar_tables
 from .file_io import global_store, make_column_defs
 
 _PAGE_FLAVOR = "Spec Sample"
-_VERS = "v1.1"
+_VERS = "v1.3"
 
 
 _DICT_TABLE_ENTRIES = {

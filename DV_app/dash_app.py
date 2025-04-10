@@ -6,7 +6,7 @@ import dash_bootstrap_components as dbc
 
 
 _PAGE_FLAVOR = "Home"
-_VERS = "phot/DR3, spec/v1.1"
+_VERS = "phot/DR3, spec/v1.3"
 
 debugMode = False
 
