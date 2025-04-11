@@ -316,7 +316,7 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
 
     ind = np.where(df[_DICT_KEYS["id"]] == objid)[0][0]
 
-    objid_phot = df[_DICT_KEYS["id_phot"]][ind]
+    objid_phot = np.int64(df[_DICT_KEYS["id_phot"]][ind])
 
     entries_sed_sfh_pz = _make_sed_sfh_pz_entries(objid, objid_phot)
 
