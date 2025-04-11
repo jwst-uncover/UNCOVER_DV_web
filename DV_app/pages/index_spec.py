@@ -4,7 +4,7 @@ import dash
 import dash_ag_grid as dag
 from dash import html
 
-from .utils_funcs import navbar_tables
+from .utils_funcs import navbar_tables, _DAG_STYLE
 
 from .file_io import global_store, make_column_defs
 
@@ -121,7 +121,8 @@ def setup_all(
                     "sortable": True,
                     "filter": True,
                 },
-                style={"height": "90vh", "margin-top": "1rem"},
+                # style={"height": "90vh", "margin-top": "1rem"},
+                style=_DAG_STYLE,
                 columnSize="autoSize",
                 columnSizeOptions={
                     "keys": list(df.keys()),
@@ -134,6 +135,7 @@ def setup_all(
                     # "paginationPageSize": 100,
                     # "paginationPageSizeSelector": [20, 50, 100, 500, 1000],
                 },
+                className="ag-theme-alpine-auto-dark",
             ),
         ]
     )

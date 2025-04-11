@@ -2,7 +2,7 @@ import dash
 
 from dash import html
 
-from .utils_funcs import navbar_home
+from .utils_funcs import navbar_home, theme_toggler
 
 
 # _PAGE_FLAVOR = "Home"
@@ -19,6 +19,7 @@ def setup_all(
         # title=f"UNCOVER Data Viewer: {page_flavor} {vers}",
         title=f"UNCOVER Data Viewer: {vers}",
     )
+    # print(theme_toggler)
 
     layout = html.Div(
         [
@@ -34,10 +35,12 @@ def setup_all(
                         ],
                         style={"margin-bottom": "0"},
                     ),
+                    html.H1("TEST2"),
+                    theme_toggler(),
                 ],
             ),
             navbar_home(),
-        ]
+        ],
     )
 
     return layout

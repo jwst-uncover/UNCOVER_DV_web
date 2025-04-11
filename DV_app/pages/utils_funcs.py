@@ -39,6 +39,13 @@ for filtrgb in _FILTERS_RGB_TUPLES:
 
 _IMGTYPES_MORPHOLOGEURS = ["filt", "img", "mod", "res", "mask"]
 
+_DAG_STYLE = {
+    # "height": "90vh",
+    "height": "91vh",
+    # "height": "92vh",
+    "margin-top": "1rem",
+}
+
 
 _STYLES = {
     "plot_divs": {
@@ -67,7 +74,7 @@ _STYLES = {
         # "width": "400px",
         "height": "200px",
         "padding": "0",
-        "color": "grey",
+        # "color": "grey",
         "font-weight": "300",
     },
     "plots": {
@@ -78,7 +85,7 @@ _STYLES = {
     "plots_spec_IMG": {
         "width": "1200px",
         "padding": "0",
-        "color": "grey",
+        # "color": "grey",
         "font-weight": "300",
     },
     "plots_spec": {
@@ -88,7 +95,7 @@ _STYLES = {
     "rgb_seg_stamps_IMG": {
         "width": "180px",
         "padding": "0",
-        "color": "grey",
+        # "color": "grey",
         "font-weight": "300",
     },
     "rgb_seg_stamps": {
@@ -98,7 +105,7 @@ _STYLES = {
     "pstamps_gallery_IMG": {
         "width": "67px",
         "padding": "0",
-        "color": "grey",
+        # "color": "grey",
         "font-weight": "300",
     },
     "pstamps_gallery": {
@@ -166,6 +173,113 @@ _LIST_PAGES = [
         "relative_path": "/spec/",
     },
 ]
+
+
+# color_mode_switch = html.Span(
+#     [
+#         dbc.Label(className="fa fa-moon", html_for="color-mode-switch"),
+#         dbc.Switch(
+#             id="color-mode-switch",
+#             value=False,
+#             className="d-inline-block ms-1",
+#             persistence=True,
+#         ),
+#         dbc.Label(className="fa fa-sun", html_for="color-mode-switch"),
+#     ]
+# )
+
+
+# _theme_toggler_bootstrap = [
+#     dbc.DropdownMenu(
+#         [
+#             dbc.DropdownMenuItem(
+#                 [
+#                     html.I(className="bi bi-sun-fill me-1"),
+#                     "Light",
+#                 ],
+#                 id="select-light",
+#             ),
+#             dbc.DropdownMenuItem(
+#                 [
+#                     html.I(className="bi bi-moon-fill me-1"),
+#                     "Dark",
+#                 ],
+#                 id="select-dark",
+#             ),
+#             dbc.DropdownMenuItem(
+#                 [
+#                     html.I(className="bi bi-circle-half me-1"),
+#                     "Auto",
+#                 ],
+#                 active=True,
+#                 id="select-auto",
+#             ),
+#         ],
+#         label=[
+#             html.I(className="bi bi-circle-half me-1", id="theme-icon-active"),
+#             html.Span(
+#                 "Toggle theme",
+#                 id="bd-theme-text",
+#                 className="d-none ms-2",
+#             ),
+#         ],
+#         id="bd-theme",
+#     ),
+#     html.P(id="item-clicks", className="mt-3"),
+# ]
+
+
+# theme_toggler =
+def theme_toggler():
+    return html.Div(
+        [
+            # _theme_toggler_bootstrap,
+            [
+                dbc.DropdownMenu(
+                    [
+                        dbc.DropdownMenuItem(
+                            [
+                                html.I(className="bi bi-sun-fill me-1"),
+                                "Light",
+                            ],
+                            id="select-light",
+                        ),
+                        dbc.DropdownMenuItem(
+                            [
+                                html.I(className="bi bi-moon-fill me-1"),
+                                "Dark",
+                            ],
+                            id="select-dark",
+                        ),
+                        dbc.DropdownMenuItem(
+                            [
+                                html.I(className="bi bi-circle-half me-1"),
+                                "Auto",
+                            ],
+                            active=True,
+                            id="select-auto",
+                        ),
+                    ],
+                    label=[
+                        html.I(
+                            className="bi bi-circle-half me-1",
+                            id="theme-icon-active",
+                        ),
+                        html.Span(
+                            "Toggle theme",
+                            id="bd-theme-text",
+                            className="d-none ms-2",
+                        ),
+                    ],
+                    id="bd-theme",
+                ),
+                html.P(id="item-clicks", className="mt-3"),
+            ],
+            "TEST IS THIS WORKING",
+        ],
+        className="dropdown",
+        # [html.Li(make_theme_toggler_bootstrap())]
+    )
 
 
 def navbar_home():

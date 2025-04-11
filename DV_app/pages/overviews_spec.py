@@ -147,6 +147,7 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
                 src=_DATA_PATH_SPEC + f"spectra/specid_{objid}_spec.png",
                 alt=f"Spectrum for {objid}",
                 style={**_STYLES["plots_spec_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["plots_spec"]},
         )
@@ -162,6 +163,7 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
                     + f"seds/DR3_{objid_phot}_sed_{fluxtype}.png",
                     alt=f"SED/{fluxtype} for {objid}/ {_VERS_PHOT} {objid_phot}",
                     style={**_STYLES["plots_IMG"]},
+                    className=".text-body-tertiary",
                 ),
                 style={**_STYLES["plots"]},
             )
@@ -172,6 +174,7 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
                 src=_DATA_PATH_PHOT + f"sfhs/DR3_{objid_phot}_SFH.png",
                 alt=f"SFH for {objid}/ {_VERS_PHOT} {objid_phot}",
                 style={**_STYLES["plots_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["plots"]},
         )
@@ -182,6 +185,7 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
                 src=_DATA_PATH_SPEC + f"Pzs/specid_{objid}_Pz.png",
                 alt=f"P(z) for {objid}/ {_VERS_PHOT} {objid_phot}",
                 style={**_STYLES["plots_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["plots"]},
         )
@@ -200,6 +204,7 @@ def _make_rgb_segmap_entries(objid):
                 + f"RGB_stamps/PSF_BCG-MATCH/{objid}_{filt}.png",
                 alt=f"RGB {filt} postage stamp for {objid}",
                 style={**_STYLES["rgb_seg_stamps_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["rgb_seg_stamps"]},
         )
@@ -213,6 +218,7 @@ def _make_rgb_segmap_entries(objid):
                 + f"RGB_stamps/PSF_BCG-MATCH/{objid}_MB.png",
                 alt=f"RGB MB postage stamp for {objid}",
                 style={**_STYLES["rgb_seg_stamps_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["rgb_seg_stamps"]},
         )
@@ -224,6 +230,7 @@ def _make_rgb_segmap_entries(objid):
                 src=_DATA_PATH_SPEC + f"segmap_stamps/{objid}_segLW.png",
                 alt=f"Segmap postage stamp for {objid}",
                 style={**_STYLES["rgb_seg_stamps_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["rgb_seg_stamps"]},
         )
@@ -235,6 +242,7 @@ def _make_rgb_segmap_entries(objid):
                 src=_DATA_PATH_SPEC + f"magmap_stamps/{objid}_magclosest.png",
                 alt=f"Magnification postage stamp for {objid}",
                 style={**_STYLES["rgb_seg_stamps_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["rgb_seg_stamps"]},
         )
@@ -247,6 +255,7 @@ def _make_rgb_segmap_entries(objid):
                 + f"msa_shutter_stamps/{objid}_F444W_slitlets.png",
                 alt=f"Shutter postage stamp for {objid}",
                 style={**_STYLES["rgb_seg_stamps_IMG"]},
+                className=".text-body-tertiary",
             ),
             style={**_STYLES["rgb_seg_stamps"]},
         )
@@ -265,6 +274,7 @@ def _make_morph_stamp_entries(objid_phot, imgtype="img"):
                         + f"morph_stamps/ID_DR3_{objid_phot}_F444W_{imgtype}.png",
                         alt="",
                         style={**_STYLES["pstamps_gallery_IMG"]},
+                        className=".text-body-tertiary",
                     ),
                     style={**_STYLES["pstamps_gallery"]},
                 )
@@ -278,6 +288,7 @@ def _make_morph_stamp_entries(objid_phot, imgtype="img"):
                         + f"morph_stamps/ID_DR3_{objid_phot}_{filt}_{imgtype}.png",
                         alt="",
                         style={**_STYLES["pstamps_gallery_IMG"]},
+                        className=".text-body-tertiary",
                     ),
                     style={**_STYLES["pstamps_gallery"]},
                 )
