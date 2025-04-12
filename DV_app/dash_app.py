@@ -1,7 +1,7 @@
 import dash
 import os
 import argparse
-from dash import Dash, html, Input, clientside_callback
+from dash import Dash, html, Input, Output, clientside_callback
 
 # Output,
 import dash_bootstrap_components as dbc
@@ -11,6 +11,7 @@ _PAGE_FLAVOR = "Home"
 _VERS = "phot/DR3, spec/v1.3"
 
 debugMode = False
+# debugMode = True
 
 
 def setup_all(
@@ -19,11 +20,33 @@ def setup_all(
 ):
     external_stylesheets = [
         dbc.icons.FONT_AWESOME,
+        dbc.icons.BOOTSTRAP,
         dbc.themes.BOOTSTRAP,
         "assets/dash_app.css",
         "assets/alt.css",
     ]
     external_scripts = ["assets/docs-theme-change.js"]
+
+    # index_string = """
+    #     <!DOCTYPE html>
+    #     <html>
+    #         <head>
+    #             {%metas%}
+    #             <title>{%title%}</title>
+    #             {%favicon%}
+    #             {%css%}
+    #         </head>
+    #         <body>
+    #             {%app_entry%}
+    #             <footer>
+    #                 {%config%}
+    #                 {%scripts%}
+    #                 {%renderer%}
+    #                 <script src="/assets/docs-theme-change.js"></script>
+    #             </footer>
+    #         </body>
+    #     </html>
+    # """
 
     app = Dash(
         __name__,
@@ -31,6 +54,8 @@ def setup_all(
         external_stylesheets=external_stylesheets,
         external_scripts=external_scripts,
         suppress_callback_exceptions=True,
+        # assets_ignore=".*docs-theme-change.*",
+        # index_string=index_string,
     )
     app.title = f"UNCOVER Data Viewer: {page_flavor} {vers}"
 
@@ -66,6 +91,20 @@ def create_parser():
     )
 
     return parser
+
+
+clientside_callback(
+    """
+    function(n_clicks){
+        window.show_active_theme();
+        return n_clicks;
+    }
+    """,
+    Output(
+        component_id="bd-theme-on-load-output", component_property="children"
+    ),
+    Input(component_id="bd-theme-on-load", component_property="n_clicks"),
+)
 
 
 clientside_callback(

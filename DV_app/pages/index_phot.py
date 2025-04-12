@@ -5,7 +5,7 @@ import dash_ag_grid as dag
 from dash import html
 
 
-from .utils_funcs import navbar_tables, theme_toggler, _DAG_STYLE
+from .utils_funcs import navbar_tables, make_headerbar, _DAG_STYLE
 
 from .file_io import global_store, make_column_defs
 
@@ -78,30 +78,26 @@ def setup_all(
     columnDefs = make_column_defs(dict_table_entries)
     df = global_store(fname_DF)
 
-    # theme_toggler = theme_toggler_entry()
-
     dash.register_page(
         __name__,
         path="/phot/",
         title=f"UNCOVER Data Viewer: {page_flavor} {vers}",
     )
 
+    headerbar = make_headerbar(
+        h2_entry=[
+            html.A(
+                "UNCOVER",
+                href="https://jwst-uncover.github.io",
+            ),
+            f" Data Viewer: {page_flavor} {vers}",
+        ]
+    )
+
     layout = html.Div(
         [
             html.Div(
-                [
-                    html.H2(
-                        children=[
-                            html.A(
-                                "UNCOVER",
-                                href="https://jwst-uncover.github.io",
-                            ),
-                            f" Data Viewer: {page_flavor} {vers}",
-                        ],
-                        style={"margin-bottom": "0"},
-                    ),
-                    # theme_toggler,
-                ],
+                headerbar,
             ),
             navbar_tables(),
             dag.AgGrid(
@@ -113,7 +109,6 @@ def setup_all(
                     "sortable": True,
                     "filter": True,
                 },
-                # style={"height": "90vh", "margin-top": "1rem"},
                 style=_DAG_STYLE,
                 columnSize="autoSize",
                 columnSizeOptions={
@@ -123,12 +118,8 @@ def setup_all(
                 dashGridOptions={
                     "rowSelection": "multiple",
                     "suppressColumnVirtualisation": True,
-                    # "pagination": True,
-                    # "paginationPageSize": 100,
-                    # "paginationPageSizeSelector": [20, 50, 100, 500, 1000],
                 },
-                # className="ag-theme-alpine-auto-dark",
-                className="ag-theme-alpine dbc-ag-grid",
+                className="ag-theme-quartz dbc-ag-grid",
             ),
         ],
     )

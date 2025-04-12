@@ -13,6 +13,7 @@ const setStoredTheme = theme => localStorage.setItem('theme', theme);
 
 const getPreferredTheme = () => {
     const storedTheme = getStoredTheme();
+    // console.log("storedTheme", storedTheme)
     if (storedTheme) {
         return storedTheme;
     } else {
@@ -21,6 +22,7 @@ const getPreferredTheme = () => {
 };
 
 const setTheme = theme => {
+    // console.log("running setTheme")
     if (theme === 'auto') {
     document.documentElement.setAttribute(
         'data-bs-theme',
@@ -35,9 +37,11 @@ const setTheme = theme => {
 
 
 const showActiveTheme = (theme, focus = false) => {
+    // console.log("running showActiveTheme")
     const themeSwitcher = document.querySelector(
     `div#bd-theme button[class*="dropdown-toggle"]`
 );
+    // console.log("themeSwitcher", themeSwitcher)
     if (!themeSwitcher) {
     return;
     }
@@ -57,8 +61,7 @@ const showActiveTheme = (theme, focus = false) => {
     `#bd-theme .dropdown-item`
 ).forEach(element => {
     element.classList.remove('active');
-    element.setAttribute('aria-pressed', 'false');
-    element.setAttribute("SHP-TEST", "true")
+    element.setAttribute('aria-pressed', 'false'); 
     });
 
     btnToActive.classList.add('active');
@@ -75,8 +78,14 @@ const showActiveTheme = (theme, focus = false) => {
 
 setTheme(getPreferredTheme());
 
-showActiveTheme(getPreferredTheme());
+// showActiveTheme(getPreferredTheme());
 
+
+
+// window.addEventListener('DOMContentLoaded', () => {
+//     console.log("in DOMContentLoaded listener ")
+//     showActiveTheme(getPreferredTheme());
+// }); 
 
   
 window
@@ -94,3 +103,9 @@ window.toggle_theme = function(theme) {
     setTheme(theme);
     showActiveTheme(theme, true);
 }; 
+
+
+window.show_active_theme = function() {
+    // console.log("in window.show_active_theme ")
+    showActiveTheme(getPreferredTheme());
+};
