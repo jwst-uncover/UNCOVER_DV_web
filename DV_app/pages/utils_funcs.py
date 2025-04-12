@@ -39,101 +39,9 @@ for filtrgb in _FILTERS_RGB_TUPLES:
 
 _IMGTYPES_MORPHOLOGEURS = ["filt", "img", "mod", "res", "mask"]
 
-
-_STYLES = {
-    "plot_divs": {
-        "overflowX": "auto",
-        "min-width": "700px",
-        "display": "flex",
-    },
-    "row_images": {
-        "padding": "0",
-        "left": "0px",
-        "top": "0px",
-        "position": "relative",
-        "display": "flex",
-        "margin": "0",
-    },
-    "row_info": {
-        "position": "relative",
-        # "display": "flex",
-        # "margin": "0",
-    },
-    "info_entries": {
-        "border": "1px solid black",
-        "padding": "0.5rem",
-    },
-    "plots_IMG": {
-        # "width": "400px",
-        "height": "200px",
-        "padding": "0",
-        "color": "grey",
-        "font-weight": "300",
-    },
-    "plots": {
-        # "width": "400px",
-        "height": "200px",
-        "padding": "0.25rem",
-    },
-    "plots_spec_IMG": {
-        "width": "1200px",
-        "padding": "0",
-        "color": "grey",
-        "font-weight": "300",
-    },
-    "plots_spec": {
-        "width": "1200px",
-        "padding": "0.25rem",
-    },
-    "rgb_seg_stamps_IMG": {
-        "width": "180px",
-        "padding": "0",
-        "color": "grey",
-        "font-weight": "300",
-    },
-    "rgb_seg_stamps": {
-        "width": "180px",
-        "padding": "0.25rem",
-    },
-    "pstamps_gallery_IMG": {
-        "width": "67px",
-        "padding": "0",
-        "color": "grey",
-        "font-weight": "300",
-    },
-    "pstamps_gallery": {
-        "width": "67px",
-        "padding": "0",
-    },
-    "pstamps_gallery_rowlabel": {
-        "width": "15px",
-        "padding": "0",
-        "writing-mode": "vertical-rl",
-        "transform": "rotate(-180deg)",
-        "text-align": "center",
-    },
-    "pstamps_gallery_collabel": {
-        "width": "67px",
-        "padding": "0",
-        "text-align": "center",
-    },
-    "pre": {
-        "border": "thin lightgrey solid",
-        "overflowX": "auto",
-        "padding": "0px 12px",
-    },
-    "padtop": {
-        "padding-top": "100px",
-    },
-    "padtop_sm": {
-        "padding-top": "10px",
-    },
-    "padtop_md": {
-        "padding-top": "30px",
-    },
-    "bold": {
-        "font-weight": "bold",
-    },
+_DAG_STYLE = {
+    "height": "90vh",
+    "margin-top": "1rem",
 }
 
 
@@ -166,6 +74,73 @@ _LIST_PAGES = [
         "relative_path": "/spec/",
     },
 ]
+
+theme_toggler = dbc.DropdownMenu(
+    [
+        dbc.DropdownMenuItem(
+            [
+                html.I(className="bi bi-sun-fill"),
+                "Light",
+            ],
+            id="select-light",
+        ),
+        dbc.DropdownMenuItem(
+            [
+                html.I(className="bi bi-moon-fill"),
+                "Dark",
+            ],
+            id="select-dark",
+        ),
+        dbc.DropdownMenuItem(
+            [
+                html.I(className="bi bi-circle-half"),
+                "Auto",
+            ],
+            active=True,
+            id="select-auto",
+        ),
+    ],
+    label=[
+        html.I(
+            className="bi bi-circle-half",
+            id="theme-icon-active",
+        ),
+        html.Span(
+            "Toggle theme",
+            id="bd-theme-text",
+            className="d-none ms-2",
+        ),
+    ],
+    id="bd-theme",
+)
+
+
+def make_headerbar(h2_entry=None):
+    headerbar = [
+        html.Ul(
+            [
+                html.Li(
+                    html.H2(
+                        children=h2_entry,
+                    ),
+                    id="heading-text",
+                ),
+                html.Li(
+                    theme_toggler,
+                    id="theme-toggler",
+                ),
+            ],
+            className="header-bar",
+        ),
+        html.Div(
+            id="bd-theme-on-load",
+        ),
+        html.Div(
+            id="bd-theme-on-load-output",
+        ),
+    ]
+
+    return headerbar
 
 
 def navbar_home():
@@ -252,16 +227,17 @@ def navbar_overviews_phot():
     )
 
 
-def _make_info_entry(val, style_kwargs={}):
+def _make_info_entry(val, className=None):
     return html.Td(
         val,
-        style={**_STYLES["info_entries"], **style_kwargs},
+        className=className,
     )
 
 
 def _make_info_entry_link(
     val,
     pathbase=None,
+    className=None,
 ):
     if isinstance(val, np.ma.core.MaskedConstant):
         entry = _make_info_entry(val)
@@ -273,7 +249,7 @@ def _make_info_entry_link(
                 val,
                 href=f"{pathbase}{int(val)}.html",
             ),
-            style={**_STYLES["info_entries"]},
+            className=className,
         )
     return entry
 
@@ -301,12 +277,16 @@ def _make_info_entries(
                     lbl += dict_table_entries_full[key].get("label_extra", "")
                     entries.append(
                         _make_info_entry(
-                            lbl, style_kwargs={"font-weight": "600"}
+                            lbl,
+                            className="info-label",
                         )
                     )
             else:
                 entries.append(
-                    _make_info_entry(key, style_kwargs={"font-weight": "600"})
+                    _make_info_entry(
+                        key,
+                        className="info-label",
+                    )
                 )
 
     elif rowtype == "entries":
