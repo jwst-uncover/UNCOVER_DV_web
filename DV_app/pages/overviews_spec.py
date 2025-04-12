@@ -7,7 +7,6 @@ from dash import html
 
 from .utils_funcs import (
     navbar_overviews_spec,
-    # _STYLES,
     _FILTERS_RGB_STR,
     _FILTERS_ALL,
     _IMGTYPES_MORPHOLOGEURS,
@@ -142,10 +141,8 @@ def _make_entries_spec_entries(objid):
             html.Img(
                 src=_DATA_PATH_SPEC + f"spectra/specid_{objid}_spec.png",
                 alt=f"Spectrum for {objid}",
-                # style={**_STYLES["plots_spec_IMG"]},
                 className=".text-body-tertiary plots-spec-IMG",
             ),
-            # style={**_STYLES["plots_spec"]},
             className="plots-spec",
         )
     ]
@@ -165,10 +162,8 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
                     src=_DATA_PATH_PHOT
                     + f"seds/DR3_{objid_phot}_sed_{fluxtype}.png",
                     alt=f"SED/{fluxtype} for {objid}/ {_VERS_PHOT} {objid_phot}",
-                    # style={**_STYLES["plots_IMG"]},
                     className=".text-body-tertiary plots-IMG",
                 ),
-                # style={**_STYLES["plots"]},
                 className="plots",
             )
         )
@@ -177,10 +172,8 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
             html.Img(
                 src=_DATA_PATH_PHOT + f"sfhs/DR3_{objid_phot}_SFH.png",
                 alt=f"SFH for {objid}/ {_VERS_PHOT} {objid_phot}",
-                # style={**_STYLES["plots_IMG"]},
                 className=".text-body-tertiary plots-IMG",
             ),
-            # style={**_STYLES["plots"]},
             className="plots",
         )
     )
@@ -189,10 +182,8 @@ def _make_sed_sfh_pz_entries(objid, objid_phot):
             html.Img(
                 src=_DATA_PATH_SPEC + f"Pzs/specid_{objid:03}_Pz.png",
                 alt=f"P(z) for {objid}/ {_VERS_PHOT} {objid_phot}",
-                # style={**_STYLES["plots_IMG"]},
                 className=".text-body-tertiary plots-IMG",
             ),
-            # style={**_STYLES["plots"]},
             className="plots",
         )
     )
@@ -209,10 +200,8 @@ def _make_rgb_segmap_entries(objid):
                 src=_DATA_PATH_SPEC
                 + f"RGB_stamps/PSF_BCG-MATCH/{objid}_{filt}.png",
                 alt=f"RGB {filt} postage stamp for {objid}",
-                # style={**_STYLES["rgb_seg_stamps_IMG"]},
                 className=".text-body-tertiary rgb-seg-stamps-IMG",
             ),
-            # style={**_STYLES["rgb_seg_stamps"]},
             className="rgb-seg-stamps",
         )
         for filt in _FILTERS_RGB_STR
@@ -224,10 +213,8 @@ def _make_rgb_segmap_entries(objid):
                 src=_DATA_PATH_SPEC
                 + f"RGB_stamps/PSF_BCG-MATCH/{objid}_MB.png",
                 alt=f"RGB MB postage stamp for {objid}",
-                # style={**_STYLES["rgb_seg_stamps_IMG"]},
                 className=".text-body-tertiary rgb-seg-stamps-IMG",
             ),
-            # style={**_STYLES["rgb_seg_stamps"]},
             className="rgb-seg-stamps",
         )
     )
@@ -237,10 +224,8 @@ def _make_rgb_segmap_entries(objid):
             html.Img(
                 src=_DATA_PATH_SPEC + f"segmap_stamps/{objid}_segLW.png",
                 alt=f"Segmap postage stamp for {objid}",
-                # style={**_STYLES["rgb_seg_stamps_IMG"]},
                 className=".text-body-tertiary rgb-seg-stamps-IMG",
             ),
-            # style={**_STYLES["rgb_seg_stamps"]},
             className="rgb-seg-stamps",
         )
     )
@@ -250,10 +235,8 @@ def _make_rgb_segmap_entries(objid):
             html.Img(
                 src=_DATA_PATH_SPEC + f"magmap_stamps/{objid}_magclosest.png",
                 alt=f"Magnification postage stamp for {objid}",
-                # style={**_STYLES["rgb_seg_stamps_IMG"]},
                 className=".text-body-tertiary rgb-seg-stamps-IMG",
             ),
-            # style={**_STYLES["rgb_seg_stamps"]},
             className="rgb-seg-stamps",
         )
     )
@@ -264,10 +247,8 @@ def _make_rgb_segmap_entries(objid):
                 src=_DATA_PATH_SPEC
                 + f"msa_shutter_stamps/{objid}_F444W_slitlets.png",
                 alt=f"Shutter postage stamp for {objid}",
-                # style={**_STYLES["rgb_seg_stamps_IMG"]},
                 className=".text-body-tertiary rgb-seg-stamps-IMG",
             ),
-            # style={**_STYLES["rgb_seg_stamps"]},
             className="rgb-seg-stamps",
         )
     )
@@ -284,10 +265,8 @@ def _make_morph_stamp_entries(objid_phot, imgtype="img"):
                         src=_DATA_PATH_PHOT
                         + f"morph_stamps/ID_DR3_{objid_phot}_F444W_{imgtype}.png",
                         alt="",
-                        # style={**_STYLES["pstamps_gallery_IMG"]},
                         className=".text-body-tertiary pstamps-gallery-IMG",
                     ),
-                    # style={**_STYLES["pstamps_gallery"]},
                     className="pstamps-gallery",
                 )
                 for filt in _FILTERS_ALL
@@ -299,10 +278,8 @@ def _make_morph_stamp_entries(objid_phot, imgtype="img"):
                         src=_DATA_PATH_PHOT
                         + f"morph_stamps/ID_DR3_{objid_phot}_{filt}_{imgtype}.png",
                         alt="",
-                        # style={**_STYLES["pstamps_gallery_IMG"]},
                         className=".text-body-tertiary pstamps-gallery-IMG",
                     ),
-                    # style={**_STYLES["pstamps_gallery"]},
                     className="pstamps-gallery",
                 )
                 for filt in _FILTERS_ALL
@@ -311,7 +288,6 @@ def _make_morph_stamp_entries(objid_phot, imgtype="img"):
         entries_out = [
             html.Td(
                 imgtype.capitalize(),
-                # style={**_STYLES["pstamps_gallery_rowlabel"]},
                 className="pstamps-gallery-rowlabel",
             ),
         ]
@@ -319,23 +295,15 @@ def _make_morph_stamp_entries(objid_phot, imgtype="img"):
         entries_out.extend(entries)
     else:
         # Labels row entries:
-
         entries = [
             html.Td(
                 filt,
-                # style={**_STYLES["pstamps_gallery_collabel"]},
                 className="pstamps-gallery-collabel",
             )
             for filt in _FILTERS_ALL
         ]
 
-        entries_out = [
-            html.Td(
-                "",
-                # style={**_STYLES["pstamps_gallery_rowlabel"]},
-                className="pstamps-gallery-rowlabel",
-            )
-        ]
+        entries_out = [html.Td("", className="pstamps-gallery-rowlabel")]
         entries_out.extend(entries)
 
     return entries_out
@@ -401,7 +369,6 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
             ### Galaxy properties
             html.Div(
                 className="row row-mt-2",
-                # style={**_STYLES["plot_divs"], "margin-top": "0.5rem"},
                 children=[
                     html.Div(
                         className="column",
@@ -411,12 +378,10 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                                 className="d-grid gap-1 d-flex navnextprev",
                             ),
                             html.Table(
-                                # className="nopad",
                                 className="props-table",
                                 children=[
                                     html.Tr(
                                         entries_galprops[enttype],
-                                        # style={**_STYLES["row_info"]},
                                     )
                                     for enttype in entries_galprops.keys()
                                 ],
@@ -428,18 +393,18 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
             ### RGB stamps + segmap
             html.Div(
                 className="row",
-                # style={**_STYLES["plot_divs"]},
                 children=[
                     html.Div(
                         className="column",
                         children=[
-                            html.H6("RGB images"),
+                            html.H6(
+                                "RGB images + Segmap + Magmap + Shuttermap "
+                            ),
                             html.Table(
                                 className="nopad",
                                 children=[
                                     html.Tr(
                                         entries_rgb_segmap,
-                                        # style={**_STYLES["row_images"]},
                                         className="row-images",
                                     ),
                                 ],
@@ -448,34 +413,9 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                     ),
                 ],
             ),
-            # ### Spectrum + SED + SFH + p(z)
-            # html.Div(
-            #     className="row",
-            #     # style={**_STYLES["plot_divs"]},
-            #     children=[
-            #         html.Div(
-            #             className="column",
-            #             children=[
-            #                 html.H6("Spectrum + SED + SFH + p(z)"),
-            #                 html.Table(
-            #                     className="nopad",
-            #                     children=[
-            #                         html.Tr(
-            #                             entries_sed_sfh_pz[plottype],
-            #                             # style={**_STYLES["row_images"]},
-            #                             className="row-images",
-            #                         )
-            #                         for plottype in entries_sed_sfh_pz.keys()
-            #                     ],
-            #                 ),
-            #             ],
-            #         ),
-            #     ],
-            # ),
             ### Spectrum
             html.Div(
                 className="row",
-                # style={**_STYLES["plot_divs"]},
                 children=[
                     html.Div(
                         className="column",
@@ -486,7 +426,6 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                                 children=[
                                     html.Tr(
                                         entries_spec[plottype],
-                                        # style={**_STYLES["row_images"]},
                                         className="row-images",
                                     )
                                     for plottype in entries_spec.keys()
@@ -499,7 +438,6 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
             ### SED + SFH + p(z)
             html.Div(
                 className="row",
-                # style={**_STYLES["plot_divs"]},
                 children=[
                     html.Div(
                         className="column",
@@ -510,7 +448,6 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                                 children=[
                                     html.Tr(
                                         entries_sed_sfh_pz[plottype],
-                                        # style={**_STYLES["row_images"]},
                                         className="row-images",
                                     )
                                     for plottype in entries_sed_sfh_pz.keys()
@@ -523,7 +460,6 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
             ### Morphologeurs
             html.Div(
                 className="row",
-                # style={**_STYLES["plot_divs"]},
                 children=[
                     html.Div(
                         className="column",
@@ -534,7 +470,6 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                                 children=[
                                     html.Tr(
                                         entries_morph[imgtype],
-                                        # style={**_STYLES["row_images"]},
                                         className="row-images",
                                     )
                                     for imgtype in entries_morph.keys()

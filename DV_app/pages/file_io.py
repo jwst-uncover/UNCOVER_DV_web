@@ -82,28 +82,18 @@ REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
 
 app = dash.get_app()
 CACHE_CONFIG = {
-    # try 'FileSystemCache' if you don't want to setup redis
-    # "CACHE_TYPE": "FileSystemCache",
-    # "CACHE_DIR": "cache-directory",
-    # "CACHE_TYPE": "SimpleCache"
     "CACHE_TYPE": "redis",
-    # "CACHE_REDIS_URL": os.environ.get("REDIS_URL", "redis://0.0.0.0:6379"),
     "CACHE_REDIS_URL": f"redis://{REDIS_HOST}:{REDIS_PORT}",
 }
 cache = Cache(
     app.server,
     config=CACHE_CONFIG,
 )
-# cache = Cache()
-# cache.init_app(app.server, config=CACHE_CONFIG)
 
 
 # cached to redis memory store to share between pages
 @cache.memoize()
 def global_store(value):
-    # simulate expensive query
-    # print(f"Computing value with {value}")
-
     df = get_table(value)
     return df
 

@@ -3,7 +3,6 @@ import os
 import argparse
 from dash import Dash, html, Input, Output, clientside_callback
 
-# Output,
 import dash_bootstrap_components as dbc
 
 
@@ -11,7 +10,6 @@ _PAGE_FLAVOR = "Home"
 _VERS = "phot/DR3, spec/v1.3"
 
 debugMode = False
-# debugMode = True
 
 
 def setup_all(
@@ -27,35 +25,12 @@ def setup_all(
     ]
     external_scripts = ["assets/docs-theme-change.js"]
 
-    # index_string = """
-    #     <!DOCTYPE html>
-    #     <html>
-    #         <head>
-    #             {%metas%}
-    #             <title>{%title%}</title>
-    #             {%favicon%}
-    #             {%css%}
-    #         </head>
-    #         <body>
-    #             {%app_entry%}
-    #             <footer>
-    #                 {%config%}
-    #                 {%scripts%}
-    #                 {%renderer%}
-    #                 <script src="/assets/docs-theme-change.js"></script>
-    #             </footer>
-    #         </body>
-    #     </html>
-    # """
-
     app = Dash(
         __name__,
         use_pages=True,
         external_stylesheets=external_stylesheets,
         external_scripts=external_scripts,
         suppress_callback_exceptions=True,
-        # assets_ignore=".*docs-theme-change.*",
-        # index_string=index_string,
     )
     app.title = f"UNCOVER Data Viewer: {page_flavor} {vers}"
 
