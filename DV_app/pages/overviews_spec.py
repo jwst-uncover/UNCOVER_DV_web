@@ -133,17 +133,29 @@ for key in _keys_flt_trim:
 _DICT_TABLE_ENTRIES_FULL.update(_DICT_TABLE_ENTRIES_FULL_ADD)
 
 
-def _make_entries_spec_entries(objid):
+def _make_spec_entries(objid, alt=False):
     entries = {}
+
+    class_img = "plots-spec-IMG"
+    class_td = "plots-spec"
+    extra = ""
+    extra_alttext = ""
+
+    if alt:
+        extra = "_alt"
+        extra_alttext = ", alternative background subtraction"
+        class_img += "-alt"
+        class_td += "-alt"
 
     entries["spec"] = [
         html.Td(
             html.Img(
-                src=_DATA_PATH_SPEC + f"spectra/specid_{objid}_spec.png",
-                alt=f"Spectrum for {objid}",
-                className=".text-body-tertiary plots-spec-IMG",
+                src=_DATA_PATH_SPEC
+                + f"spectra/specid_{objid}_spec{extra}.png",
+                alt=f"Spectrum for {objid}{extra_alttext}",
+                className=f".text-body-tertiary {class_img}",
             ),
-            className="plots-spec",
+            className=f"{class_td}",
         )
     ]
 
@@ -316,7 +328,9 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
 
     objid_phot = np.int64(df[_DICT_KEYS["id_phot"]][ind])
 
-    entries_spec = _make_entries_spec_entries(objid)
+    entries_spec = _make_spec_entries(objid)
+
+    entries_spec_alt = _make_spec_entries(objid, alt=True)
 
     entries_sed_sfh_pz = _make_sed_sfh_pz_entries(objid, objid_phot)
 
@@ -429,6 +443,27 @@ def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
                                         className="row-images",
                                     )
                                     for plottype in entries_spec.keys()
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ### Spectrum: alternative background subtraction
+            html.Div(
+                className="row",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.Table(
+                                className="nopad",
+                                children=[
+                                    html.Tr(
+                                        entries_spec_alt[plottype],
+                                        className="row-images",
+                                    )
+                                    for plottype in entries_spec_alt.keys()
                                 ],
                             ),
                         ],

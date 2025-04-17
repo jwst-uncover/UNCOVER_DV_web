@@ -258,6 +258,12 @@ table.props-table td.plots-spec {
   padding: 0.25rem; 
 }
 
+
+table.props-table td.plots-spec-alt {
+  width: 800px; 
+  padding: 0.25rem; 
+}
+
 table.props-table td.rgb-seg-stamps {
   width: 180px; 
   padding: 0.25rem; 
@@ -291,6 +297,13 @@ img.plots-IMG {
 
 img.plots-spec-IMG {
   width: 1200px;
+  padding: 0; 
+  font-weight: 300; 
+}
+
+
+img.plots-spec-IMG-alt {
+  width: 800px;
   padding: 0; 
   font-weight: 300; 
 }
