@@ -96,7 +96,7 @@ clientside_callback(
 )
 
 
-if __name__ == "__main__":
+def main():
     # read in command line arguments
     parser = create_parser()
     args = parser.parse_args()
@@ -118,6 +118,7 @@ if __name__ == "__main__":
     )
 
     if debugMode:
+        print(f"{debugMode=}", flush=True)
         app.run(
             debug=True,
             host=args.host,
@@ -132,3 +133,7 @@ if __name__ == "__main__":
         print(
             f"dash_app : {datetime.datetime.now()} * post server", flush=True
         )
+
+
+if __name__ == "__main__":
+    main()

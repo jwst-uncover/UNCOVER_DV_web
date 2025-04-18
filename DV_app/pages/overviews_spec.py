@@ -99,26 +99,40 @@ _keys_flt_trim = [
     "z_spec",
 ]
 
+_dict_keys_alt_names = {
+    "z_phot": "z_SPS",
+}
+
 for key in _keys_flt_trim_pctl:
+    dkey = _dict_keys_alt_names.get(key, None)
     for pctl in [16, 50, 84]:
         _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"] = {
             "format": "0.3f",
             "combine_tuple": True,
             "label_extra": " (50 [16,84])",
         }
+        if dkey is not None:
+            _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"]["label_alt"] = dkey
 
 for key in _keys_flt_trim_pctl_log:
+    dkey = _dict_keys_alt_names.get(key, None)
     for pctl in [16, 50, 84]:
         _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"] = {
             "format": "0.2e",
             "combine_tuple": True,
             "label_extra": " (50 [16,84])",
         }
+        if dkey is not None:
+            _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"]["label_alt"] = dkey
 
 for key in _keys_flt_trim:
+    dkey = _dict_keys_alt_names.get(key, None)
     _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}"] = {
         "format": "0.3f",
     }
+
+    if dkey is not None:
+        _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}"]["label_alt"] = dkey
 
 
 _keys_flt_trim = [

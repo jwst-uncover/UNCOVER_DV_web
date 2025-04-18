@@ -82,6 +82,7 @@ REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
 
 app = dash.get_app()
 CACHE_CONFIG = {
+    # "CACHE_TYPE": "SimpleCache",  ## DEBUGGING
     "CACHE_TYPE": "redis",
     "CACHE_REDIS_URL": f"redis://{REDIS_HOST}:{REDIS_PORT}",
 }

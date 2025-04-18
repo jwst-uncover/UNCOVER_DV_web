@@ -273,18 +273,26 @@ def _make_info_entries(
                 )
             if combine_tuple:
                 if key.split("_")[-1] == "50":
-                    lbl = "_".join(key.split("_")[:-1])
-                    lbl += dict_table_entries_full[key].get("label_extra", "")
-                    entries.append(
-                        _make_info_entry(
-                            lbl,
-                            className="info-label",
-                        )
+                    # lbl = "_".join(key.split("_")[:-1])
+                    lbl = dict_table_entries_full[key].get(
+                        "label_alt", "_".join(key.split("_")[:-1])
                     )
+                    lbl += dict_table_entries_full[key].get("label_extra", "")
+
+                else:
+                    lbl = None
             else:
+                # lbl = key
+                entry = dict_table_entries_full.get("key", None)
+                if entry is not None:
+                    lbl = dict_table_entries_full[key].get("label_alt", key)
+                else:
+                    lbl = key
+
+            if lbl is not None:
                 entries.append(
                     _make_info_entry(
-                        key,
+                        lbl,
                         className="info-label",
                     )
                 )
