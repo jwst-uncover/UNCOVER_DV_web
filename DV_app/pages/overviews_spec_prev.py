@@ -1,12 +1,12 @@
 import dash
 
 from .file_io import (
-    _FNAME_DF_SPEC_FULL,
-    _VERS_SPEC,
+    _FNAME_DF_SPEC_FULL_PREV,
+    _VERS_SPEC_PREV,
 )
 from .utils_funcs import setup_layout_spec_overview, _PAGE_FLAVOR_SPEC_OVERVIEW
 
-_SPEC_PATH_EXTRA = ""
+_SPEC_PATH_EXTRA = f"_{_VERS_SPEC_PREV}"
 
 dash.register_page(
     __name__,
@@ -17,8 +17,8 @@ dash.register_page(
 def layout(
     id="1.html",
     page_flavor=_PAGE_FLAVOR_SPEC_OVERVIEW,
-    vers=_VERS_SPEC,
-    fname_DF=_FNAME_DF_SPEC_FULL,
+    vers=_VERS_SPEC_PREV,
+    fname_DF=_FNAME_DF_SPEC_FULL_PREV,
     spec_path_extra=_SPEC_PATH_EXTRA,
     **kwargs,
 ):
