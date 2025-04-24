@@ -1,10 +1,7 @@
-import pathlib
 import numpy as np
 
 import dash
-
 from dash import html
-
 
 from .utils_funcs import (
     navbar_overviews_phot,
@@ -16,7 +13,7 @@ from .utils_funcs import (
     make_headerbar,
 )
 
-from .file_io import global_store
+from .file_io import global_store, _FNAME_DF_PHOT_FULL, _VERS_PHOT
 
 
 dash.register_page(
@@ -25,16 +22,13 @@ dash.register_page(
 )
 
 _PAGE_FLAVOR = "Phot Sample"
-_VERS = "DR3"
+_VERS = _VERS_PHOT
 
-_VERS_PHOT = "DR3"
 
-path = pathlib.Path(__file__).parent.parent.resolve()
-_FNAME_DF = f"{path}/assets/data/df_sample_phot_full.fits"
 _DATA_PATH = "/assets/data/cutouts_phot/"
 
 
-df = global_store(_FNAME_DF)
+df = global_store(_FNAME_DF_PHOT_FULL)
 
 
 _DICT_KEYS = {

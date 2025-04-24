@@ -3,8 +3,9 @@ import dash
 from dash import html
 
 from .utils_funcs import navbar_home, make_headerbar
+from .file_io import _VERS_PHOT, _VERS_SPEC
 
-_VERS = "phot/DR3, spec/v1.3"
+_VERS = f"phot/{_VERS_PHOT}, spec/{_VERS_SPEC}"
 
 
 def setup_all(

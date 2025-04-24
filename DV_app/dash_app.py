@@ -5,17 +5,17 @@ from dash import Dash, html, Input, Output, clientside_callback
 
 import dash_bootstrap_components as dbc
 
-
-_PAGE_FLAVOR = "Home"
-_VERS = "phot/DR3, spec/v1.3"
-
 debugMode = False
 
 
-def setup_all(
-    page_flavor=_PAGE_FLAVOR,
-    vers=_VERS,
-):
+def _make_app_title(vers_phot=None, vers_spec=None):
+    page_flavor = "Home"
+    vers = f"phot/{vers_phot}, spec/{vers_spec}"
+    app_title = f"UNCOVER Data Viewer: {page_flavor} {vers}"
+    return app_title
+
+
+def setup_all():
     external_stylesheets = [
         dbc.icons.FONT_AWESOME,
         dbc.icons.BOOTSTRAP,
@@ -32,7 +32,12 @@ def setup_all(
         external_scripts=external_scripts,
         suppress_callback_exceptions=True,
     )
-    app.title = f"UNCOVER Data Viewer: {page_flavor} {vers}"
+
+    from pages.file_io import _VERS_PHOT, _VERS_SPEC
+
+    app_title = _make_app_title(vers_phot=_VERS_PHOT, vers_spec=_VERS_SPEC)
+
+    app.title = app_title
 
     app.layout = html.Div(
         [

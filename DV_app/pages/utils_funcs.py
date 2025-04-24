@@ -1,8 +1,30 @@
-# import dash
+import dash_ag_grid as dag
 
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 import numpy as np
+
+from .file_io import (
+    global_store,
+    make_column_defs,
+    _VERS_SPEC,
+    _VERS_SPEC_PREV,
+    _VERS_PHOT,
+    _FNAME_DF_SPEC_INDEX,
+    _FNAME_DF_SPEC_FULL,
+    _INCLUDE_PREV,
+)
+
+
+_PAGE_FLAVOR_SPEC_INDEX = "Spec Sample"
+_SPEC_PATH_EXTRA = f"_{_VERS_SPEC}"
+
+
+_PAGE_FLAVOR_SPEC_OVERVIEW = "Spec Sample"
+
+_DATA_PATH_SPEC = "/assets/data/cutouts_spec/"
+_DATA_PATH_PHOT = "/assets/data/cutouts_phot/"
+
 
 _FILTERS_RGB_TUPLES = [
     ["F115W+F150W", "F200W+F277W", "F356W+F410M+F444W"],
@@ -45,18 +67,13 @@ _DAG_STYLE = {
 }
 
 
-#########################################
+###########################################################################
 
 
-_DICT_OVERVIEW_ALIASES_HOME = {
+_DICT_OVERVIEW_ALIASES = {
     "Index phot": "Table: Full photometric sample",
     "Index spec": "Table: Spectroscopic sample",
-}
-
-
-_DICT_OVERVIEW_ALIASES_TABLES = {
-    "Index phot": "Table: Full photometric sample",
-    "Index spec": "Table: Spectroscopic sample",
+    "Index spec prev": f"Table: Spectroscopic sample ({_VERS_SPEC_PREV})",
 }
 
 
@@ -72,6 +89,10 @@ _LIST_PAGES = [
     {
         "name": "Index spec",
         "relative_path": "/spec/",
+    },
+    {
+        "name": "Index spec prev",
+        "relative_path": f"/spec_{_VERS_SPEC_PREV}/",
     },
 ]
 
@@ -145,21 +166,30 @@ def make_headerbar(h2_entry=None):
 
 def navbar_home():
     ### Links / pseudo navbar
+    if _INCLUDE_PREV:
+        list_pages = [
+            "Index phot",
+            "Index spec",
+            "Index spec prev",
+        ]
+
+    else:
+        list_pages = [
+            "Index phot",
+            "Index spec",
+        ]
+
     return html.Div(
         [
             html.Div(
                 dcc.Link(
-                    f"{_DICT_OVERVIEW_ALIASES_HOME.get(page['name'], page['name'])}",
+                    f"{_DICT_OVERVIEW_ALIASES.get(page['name'], page['name'])}",
                     href=page["relative_path"],
                 ),
                 className="navbar",
             )
             for page in _LIST_PAGES
-            if page["name"]
-            in [
-                "Index phot",
-                "Index spec",
-            ]
+            if page["name"] in list_pages
         ]
     )
 
@@ -169,7 +199,7 @@ def navbar_tables():
         [
             html.Div(
                 dcc.Link(
-                    f"{_DICT_OVERVIEW_ALIASES_TABLES.get(page['name'], page['name'])}",
+                    f"{_DICT_OVERVIEW_ALIASES.get(page['name'], page['name'])}",
                     href=page["relative_path"],
                 ),
                 className="navbar_small",
@@ -183,20 +213,25 @@ def navbar_tables():
     )
 
 
-def navbar_overviews_spec():
+def navbar_overviews_spec(vers=_VERS_SPEC):
+    if vers != _VERS_SPEC:
+        name_ext = " prev"
+    else:
+        name_ext = ""
+
     return html.Div(
         [
             html.Div(
                 [
                     dcc.Link(
-                        f"{_DICT_OVERVIEW_ALIASES_TABLES.get(page['name'], page['name'])}",
+                        f"{_DICT_OVERVIEW_ALIASES.get(page['name'], page['name'])}",
                         href=page["relative_path"],
                     )
                     for page in _LIST_PAGES
                     if page["name"]
                     in [
                         "Home",
-                        "Index spec",
+                        f"Index spec{name_ext}",
                     ]
                 ],
                 className="navbar_small navbarhoriz",
@@ -211,7 +246,7 @@ def navbar_overviews_phot():
             html.Div(
                 [
                     dcc.Link(
-                        f"{_DICT_OVERVIEW_ALIASES_TABLES.get(page['name'], page['name'])}",
+                        f"{_DICT_OVERVIEW_ALIASES.get(page['name'], page['name'])}",
                         href=page["relative_path"],
                     )
                     for page in _LIST_PAGES
@@ -408,3 +443,673 @@ def _make_nextprev_nav(df, ind, dict_keys=None, pathbase_link=None):
         )
 
     return entries
+
+
+###########################################################################
+
+
+def _make_dict_table_entries_index_spec(vers=_VERS_SPEC):
+    if vers != _VERS_SPEC:
+        cellRendererParams = {"path_extra": f"_{vers}"}
+    else:
+        cellRendererParams = {"path_extra": ""}
+
+    _DICT_TABLE_ENTRIES_INDEX_SPEC = {
+        "specid": {
+            "cellRenderer": "OverviewSpecLink",
+            "cellRendererParams": cellRendererParams,
+            "format": "d",
+        },
+        "id_DR3": {
+            "cellRenderer": "OverviewPhotLink",
+            "format": "d",
+        },
+        "z_spec": {
+            "format": "0.3f",
+        },
+        ####
+        "magF444W": {
+            "format": "0.2f",
+        },
+        "z_phot_50": {
+            "from": "sps",
+            "format": "0.3f",
+        },
+        "lmstar_50": {
+            "from": "sps",
+            "format": "0.2f",
+        },
+        "sfr100_50": {
+            "from": "sps",
+            "format": "0.2e",
+        },
+        "ssfr100_50": {
+            "from": "sps",
+            "format": "0.2e",
+        },
+        "mu_50": {
+            "from": "sps",
+            "format": "0.2f",
+        },
+        "use_phot": {
+            "from": "phot",
+        },
+        ####
+        "ra": {
+            "format": "0.8f",
+        },
+        "dec": {
+            "format": "0.8f",
+        },
+        "id_msa_epoch1": {
+            "format": "d",
+        },
+        "id_msa_epoch2": {
+            "format": "d",
+        },
+        "sep_DR3_epoch1": {
+            "format": "0.3f",
+        },
+        "sep_DR3_epoch2": {
+            "format": "0.3f",
+        },
+    }
+    for i in range(1, 10):
+        _DICT_TABLE_ENTRIES_INDEX_SPEC[f"mask{i}"] = {}
+
+    return _DICT_TABLE_ENTRIES_INDEX_SPEC
+
+
+def setup_all_spec_index(
+    page_flavor=_PAGE_FLAVOR_SPEC_INDEX,
+    vers=_VERS_SPEC,
+    fname_DF=_FNAME_DF_SPEC_INDEX,
+    spec_path_extra=_SPEC_PATH_EXTRA,
+):
+    dict_table_entries = _make_dict_table_entries_index_spec(vers=vers)
+    columnDefs = make_column_defs(dict_table_entries)
+    df = global_store(fname_DF)
+
+    # dash.register_page(
+    #     __name__,
+    #     path=f"/spec{spec_path_extra}/",
+    #     title=f"UNCOVER Data Viewer: {page_flavor} {vers}",
+    # )
+
+    headerbar = make_headerbar(
+        h2_entry=[
+            html.A(
+                "UNCOVER",
+                href="https://jwst-uncover.github.io",
+            ),
+            f" Data Viewer: {page_flavor} {vers}",
+        ]
+    )
+
+    layout = html.Div(
+        [
+            html.Div(
+                headerbar,
+            ),
+            navbar_tables(),
+            dag.AgGrid(
+                id="sample",
+                rowData=df.to_dict("records"),
+                columnDefs=columnDefs,
+                defaultColDef={
+                    "resizable": True,
+                    "sortable": True,
+                    "filter": True,
+                },
+                style=_DAG_STYLE,
+                columnSize="autoSize",
+                columnSizeOptions={
+                    "keys": list(df.keys()),
+                    "skipHeader": False,
+                },
+                dashGridOptions={
+                    "rowSelection": "multiple",
+                    "suppressColumnVirtualisation": True,
+                },
+                className="ag-theme-quartz dbc-ag-grid",
+            ),
+        ]
+    )
+
+    return layout
+
+
+###########################################################################
+
+
+def _make_dict_keys_overview_spec():
+    _DICT_KEYS = {
+        "id": "specid",
+        "id_phot": "id_DR3",
+    }
+    return _DICT_KEYS
+
+
+def _make_keys_info_overview_spec(df):
+    _BREAKS_INFO_ENTRIES = [
+        "ra",
+        "z_phot_16",
+    ]
+    _KEYS_INFO = []
+
+    _indstart = 0
+    _keys_orig = np.array(list(df.keys()))
+    for bkey in _BREAKS_INFO_ENTRIES:
+        whkey = np.where(_keys_orig == bkey)[0]
+        _indend = whkey[0]
+        _KEYS_INFO.append(_keys_orig[_indstart:_indend])
+        _indstart = _indend
+    _KEYS_INFO.append(_keys_orig[_indstart:])
+    return _KEYS_INFO
+
+
+def _make_dict_table_entries_full_spec():
+    _DICT_TABLE_ENTRIES_FULL = {
+        "ra": {
+            "format": "0.8f",
+        },
+        "dec": {
+            "format": "0.8f",
+        },
+        "sep_DR3_epoch1": {
+            "format": "0.3f",
+        },
+        "sep_DR3_epoch2": {
+            "format": "0.3f",
+        },
+    }
+
+    _DICT_TABLE_ENTRIES_FULL_ADD = {
+        "magF444W": {
+            "format": "0.3f",
+        },
+    }
+
+    _keys_flt_trim_pctl = [
+        "z_phot",
+        "mu",
+        "lmstar",
+        "mwa",
+        "dust2",
+        "lmet",
+        "logfagn",
+        "z_spec",  # to get _16,_50,_84
+    ]
+    _keys_flt_trim_pctl_log = [
+        "sfr100",
+        "ssfr100",
+    ]
+    _keys_flt_trim = [
+        "z_spec",
+    ]
+
+    _dict_keys_alt_names = {
+        "z_phot": "z_SPS",
+    }
+
+    for key in _keys_flt_trim_pctl:
+        dkey = _dict_keys_alt_names.get(key, None)
+        for pctl in [16, 50, 84]:
+            _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"] = {
+                "format": "0.3f",
+                "combine_tuple": True,
+                "label_extra": " (50 [16,84])",
+            }
+            if dkey is not None:
+                _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"]["label_alt"] = (
+                    dkey
+                )
+
+    for key in _keys_flt_trim_pctl_log:
+        dkey = _dict_keys_alt_names.get(key, None)
+        for pctl in [16, 50, 84]:
+            _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"] = {
+                "format": "0.2e",
+                "combine_tuple": True,
+                "label_extra": " (50 [16,84])",
+            }
+            if dkey is not None:
+                _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}_{pctl}"]["label_alt"] = (
+                    dkey
+                )
+
+    for key in _keys_flt_trim:
+        dkey = _dict_keys_alt_names.get(key, None)
+        _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}"] = {
+            "format": "0.3f",
+        }
+
+        if dkey is not None:
+            _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}"]["label_alt"] = dkey
+
+    _keys_flt_trim = [
+        "texp_tot",
+    ]
+    for key in _keys_flt_trim:
+        _DICT_TABLE_ENTRIES_FULL_ADD[f"{key}"] = {
+            "format": "0.1f",
+        }
+
+    _DICT_TABLE_ENTRIES_FULL.update(_DICT_TABLE_ENTRIES_FULL_ADD)
+
+    return _DICT_TABLE_ENTRIES_FULL
+
+
+def _make_spec_entries(objid, spec_path_extra=None, alt=False):
+    entries = {}
+
+    class_img = "plots-spec-IMG"
+    class_td = "plots-spec"
+    extra = ""
+    extra_alttext = ""
+
+    if alt:
+        extra = "_alt"
+        extra_alttext = ", alternative background subtraction"
+        class_img += "-alt"
+        class_td += "-alt"
+
+    entries["spec"] = [
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC
+                + f"spectra{spec_path_extra}/specid_{objid}_spec{extra}.png",
+                alt=f"Spectrum for {objid}{extra_alttext}",
+                className=f".text-body-tertiary {class_img}",
+            ),
+            className=f"{class_td}",
+        )
+    ]
+
+    return entries
+
+
+def _make_sed_sfh_pz_entries(objid, objid_phot, spec_path_extra=None):
+    entries = {}
+
+    entries_sed_sfh_pz = []
+
+    for fluxtype in ["fnu", "flam"]:
+        entries_sed_sfh_pz.append(
+            html.Td(
+                html.Img(
+                    src=_DATA_PATH_PHOT
+                    + f"seds/DR3_{objid_phot}_sed_{fluxtype}.png",
+                    alt=f"SED/{fluxtype} for {objid}/ {_VERS_PHOT} {objid_phot}",
+                    className=".text-body-tertiary plots-IMG",
+                ),
+                className="plots",
+            )
+        )
+    entries_sed_sfh_pz.append(
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_PHOT + f"sfhs/DR3_{objid_phot}_SFH.png",
+                alt=f"SFH for {objid}/ {_VERS_PHOT} {objid_phot}",
+                className=".text-body-tertiary plots-IMG",
+            ),
+            className="plots",
+        )
+    )
+    entries_sed_sfh_pz.append(
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC
+                + f"Pzs{spec_path_extra}/specid_{objid:03}_Pz.png",
+                alt=f"P(z) for {objid}/ {_VERS_PHOT} {objid_phot}",
+                className=".text-body-tertiary plots-IMG",
+            ),
+            className="plots",
+        )
+    )
+
+    entries["sed_sfh_pz"] = entries_sed_sfh_pz
+
+    return entries
+
+
+def _make_rgb_segmap_entries(objid):
+    entries = [
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC
+                + f"RGB_stamps/PSF_BCG-MATCH/{objid}_{filt}.png",
+                alt=f"RGB {filt} postage stamp for {objid}",
+                className=".text-body-tertiary rgb-seg-stamps-IMG",
+            ),
+            className="rgb-seg-stamps",
+        )
+        for filt in _FILTERS_RGB_STR
+    ]
+
+    entries.append(
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC
+                + f"RGB_stamps/PSF_BCG-MATCH/{objid}_MB.png",
+                alt=f"RGB MB postage stamp for {objid}",
+                className=".text-body-tertiary rgb-seg-stamps-IMG",
+            ),
+            className="rgb-seg-stamps",
+        )
+    )
+
+    entries.append(
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC + f"segmap_stamps/{objid}_segLW.png",
+                alt=f"Segmap postage stamp for {objid}",
+                className=".text-body-tertiary rgb-seg-stamps-IMG",
+            ),
+            className="rgb-seg-stamps",
+        )
+    )
+
+    entries.append(
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC + f"magmap_stamps/{objid}_magclosest.png",
+                alt=f"Magnification postage stamp for {objid}",
+                className=".text-body-tertiary rgb-seg-stamps-IMG",
+            ),
+            className="rgb-seg-stamps",
+        )
+    )
+
+    entries.append(
+        html.Td(
+            html.Img(
+                src=_DATA_PATH_SPEC
+                + f"msa_shutter_stamps/{objid}_F444W_slitlets.png",
+                alt=f"Shutter postage stamp for {objid}",
+                className=".text-body-tertiary rgb-seg-stamps-IMG",
+            ),
+            className="rgb-seg-stamps",
+        )
+    )
+
+    return entries
+
+
+def _make_morph_stamp_entries(objid_phot, imgtype="img"):
+    if imgtype in _IMGTYPES_MORPHOLOGEURS[1:]:
+        if imgtype == "mask":
+            entries = [
+                html.Td(
+                    html.Img(
+                        src=_DATA_PATH_PHOT
+                        + f"morph_stamps/ID_DR3_{objid_phot}_F444W_{imgtype}.png",
+                        alt="",
+                        className=".text-body-tertiary pstamps-gallery-IMG",
+                    ),
+                    className="pstamps-gallery",
+                )
+                for filt in _FILTERS_ALL
+            ]
+        else:
+            entries = [
+                html.Td(
+                    html.Img(
+                        src=_DATA_PATH_PHOT
+                        + f"morph_stamps/ID_DR3_{objid_phot}_{filt}_{imgtype}.png",
+                        alt="",
+                        className=".text-body-tertiary pstamps-gallery-IMG",
+                    ),
+                    className="pstamps-gallery",
+                )
+                for filt in _FILTERS_ALL
+            ]
+
+        entries_out = [
+            html.Td(
+                imgtype.capitalize(),
+                className="pstamps-gallery-rowlabel",
+            ),
+        ]
+
+        entries_out.extend(entries)
+    else:
+        # Labels row entries:
+        entries = [
+            html.Td(
+                filt,
+                className="pstamps-gallery-collabel",
+            )
+            for filt in _FILTERS_ALL
+        ]
+
+        entries_out = [html.Td("", className="pstamps-gallery-rowlabel")]
+        entries_out.extend(entries)
+
+    return entries_out
+
+
+def setup_layout_spec_overview(
+    id="1.html",
+    page_flavor=_PAGE_FLAVOR_SPEC_OVERVIEW,
+    vers=_VERS_SPEC,
+    fname_DF=_FNAME_DF_SPEC_FULL,
+    spec_path_extra=_SPEC_PATH_EXTRA,
+    dict_keys=_make_dict_keys_overview_spec(),
+    dict_table_entries_full=_make_dict_table_entries_full_spec(),
+    **kwargs,
+):
+    # dash.register_page(
+    #     __name__,
+    #     path_template=f"/overviews/spec{spec_path_extra}/<id>",
+    # )
+
+    df = global_store(fname_DF)
+
+    # def layout(id="1.html", page_flavor=_PAGE_FLAVOR, vers=_VERS, **kwargs):
+    objid = np.int64(id.split(".html")[0])
+
+    ind = np.where(df[dict_keys["id"]] == objid)[0][0]
+
+    objid_phot = np.int64(df[dict_keys["id_phot"]][ind])
+
+    entries_spec = _make_spec_entries(objid, spec_path_extra=spec_path_extra)
+
+    entries_spec_alt = _make_spec_entries(
+        objid, alt=True, spec_path_extra=spec_path_extra
+    )
+
+    entries_sed_sfh_pz = _make_sed_sfh_pz_entries(
+        objid, objid_phot, spec_path_extra=spec_path_extra
+    )
+
+    entries_rgb_segmap = _make_rgb_segmap_entries(objid)
+
+    entries_morph = {}
+    for imgtype in _IMGTYPES_MORPHOLOGEURS:
+        entries_morph[imgtype] = _make_morph_stamp_entries(
+            objid_phot, imgtype=imgtype
+        )
+
+    entries_overview_nextprev = _make_nextprev_nav(
+        df,
+        ind,
+        dict_keys=dict_keys,
+        pathbase_link=f"/overviews/spec{spec_path_extra}/",
+    )
+
+    entries_galprops = {}
+
+    keys_info = _make_keys_info_overview_spec(df)
+
+    for jj, keys_list in enumerate(keys_info):
+        for enttype in ["labels", "entries"]:
+            entries_galprops[f"{enttype}_{jj}"] = _make_info_entries(
+                df,
+                ind,
+                dict_table_entries_full=dict_table_entries_full,
+                rowtype=enttype,
+                keys_list=keys_list,
+                key_crossref="id_DR3",
+                pathbase_crossref="/overviews/phot/",
+            )
+
+    headerbar = make_headerbar(
+        h2_entry=[
+            html.A(
+                "UNCOVER",
+                href="https://jwst-uncover.github.io",
+            ),
+            f" Data Viewer: {page_flavor} {vers}",
+        ]
+    )
+
+    overviewlayout = html.Div(
+        [
+            html.Div(
+                headerbar,
+            ),
+            ### Links / pseudo navbar
+            navbar_overviews_spec(vers=vers),
+            ### Galaxy properties
+            html.Div(
+                className="row row-mt-2",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.Div(
+                                entries_overview_nextprev,
+                                className="d-grid gap-1 d-flex navnextprev",
+                            ),
+                            html.Table(
+                                className="props-table",
+                                children=[
+                                    html.Tr(
+                                        entries_galprops[enttype],
+                                    )
+                                    for enttype in entries_galprops.keys()
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ### RGB stamps + segmap
+            html.Div(
+                className="row",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.H6(
+                                "RGB images + Segmap + Magmap + Shuttermap "
+                            ),
+                            html.Table(
+                                className="nopad",
+                                children=[
+                                    html.Tr(
+                                        entries_rgb_segmap,
+                                        className="row-images",
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ### Spectrum
+            html.Div(
+                className="row",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.H6("Spectrum"),
+                            html.Table(
+                                className="nopad",
+                                children=[
+                                    html.Tr(
+                                        entries_spec[plottype],
+                                        className="row-images",
+                                    )
+                                    for plottype in entries_spec.keys()
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ### Spectrum: alternative background subtraction
+            html.Div(
+                className="row",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.Table(
+                                className="nopad",
+                                children=[
+                                    html.Tr(
+                                        entries_spec_alt[plottype],
+                                        className="row-images",
+                                    )
+                                    for plottype in entries_spec_alt.keys()
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ### SED + SFH + p(z)
+            html.Div(
+                className="row",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.H6("SED + SFH + p(z)"),
+                            html.Table(
+                                className="nopad",
+                                children=[
+                                    html.Tr(
+                                        entries_sed_sfh_pz[plottype],
+                                        className="row-images",
+                                    )
+                                    for plottype in entries_sed_sfh_pz.keys()
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ### Morphologeurs
+            html.Div(
+                className="row",
+                children=[
+                    html.Div(
+                        className="column",
+                        children=[
+                            html.H6("Morphologeurs"),
+                            html.Table(
+                                className="nopad",
+                                children=[
+                                    html.Tr(
+                                        entries_morph[imgtype],
+                                        className="row-images",
+                                    )
+                                    for imgtype in entries_morph.keys()
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            ###
+        ]
+    )
+
+    return overviewlayout
+
+
+###########################################################################

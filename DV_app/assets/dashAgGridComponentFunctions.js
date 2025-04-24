@@ -11,7 +11,7 @@ dagcomponentfuncs.OverviewPhotLink = function (props) {
 dagcomponentfuncs.OverviewSpecLink = function (props) {
     return React.createElement(
         'a',
-        {href: '/overviews/spec/' + props.value + '.html'},
+        {href: '/overviews/spec' + props.path_extra + '/' + props.value + '.html'},
         props.value
     );
 };

@@ -1,5 +1,3 @@
-import pathlib
-
 import dash
 import dash_ag_grid as dag
 from dash import html
@@ -7,10 +5,15 @@ from dash import html
 
 from .utils_funcs import navbar_tables, make_headerbar, _DAG_STYLE
 
-from .file_io import global_store, make_column_defs
+from .file_io import (
+    global_store,
+    make_column_defs,
+    _FNAME_DF_PHOT_INDEX,
+    _VERS_PHOT,
+)
 
 _PAGE_FLAVOR = "Phot Sample"
-_VERS = "DR3"
+_VERS = _VERS_PHOT
 
 _DICT_TABLE_ENTRIES = {
     "id": {
@@ -65,14 +68,11 @@ _DICT_TABLE_ENTRIES = {
     },
 }
 
-path = pathlib.Path(__file__).parent.parent.resolve()
-_FNAME_DF = f"{path}/assets/data/df_sample_phot_index.fits"
-
 
 def setup_all(
     page_flavor=_PAGE_FLAVOR,
     vers=_VERS,
-    fname_DF=_FNAME_DF,
+    fname_DF=_FNAME_DF_PHOT_INDEX,
     dict_table_entries=_DICT_TABLE_ENTRIES,
 ):
     columnDefs = make_column_defs(dict_table_entries)

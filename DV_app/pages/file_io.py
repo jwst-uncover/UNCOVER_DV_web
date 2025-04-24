@@ -14,6 +14,13 @@ from astropy.units import UnitsWarning
 warnings.simplefilter("ignore", category=UnitsWarning)
 
 
+_INCLUDE_PREV = os.environ.get("INCLUDE_PREV", "False")
+if _INCLUDE_PREV == "True":
+    _INCLUDE_PREV = True
+elif _INCLUDE_PREV == "False":
+    _INCLUDE_PREV = False
+
+
 def make_column_defs(dict_table_entries):
     columnDefs = []
 
@@ -31,8 +38,13 @@ def make_column_defs(dict_table_entries):
             }
 
         renderer = dict_table_entries[keyin].get("cellRenderer", None)
+        renderer_params = dict_table_entries[keyin].get(
+            "cellRendererParams", None
+        )
         if renderer is not None:
             dict_col["cellRenderer"] = renderer
+        if renderer_params is not None:
+            dict_col["cellRendererParams"] = renderer_params
 
         columnDefs.append(dict_col)
 
@@ -49,7 +61,7 @@ def get_table(fname_DF):
             df, keys=["id_DR3", "id_msa_epoch1", "id_msa_epoch2"]
         )
 
-    if splt[-1] == "index":
+    if splt[-2] == "index":
         df = df.to_pandas()
 
     return df
@@ -99,16 +111,45 @@ def global_store(value):
     return df
 
 
-def preload_all_data():
-    path = pathlib.Path(__file__).parent.parent.resolve()
-    _FNAME_DF_PHOT_INDEX = f"{path}/assets/data/df_sample_phot_index.fits"
-    _FNAME_DF_SPEC_INDEX = f"{path}/assets/data/df_sample_spec_index.fits"
-    _FNAME_DF_PHOT_FULL = f"{path}/assets/data/df_sample_phot_full.fits"
-    _FNAME_DF_SPEC_FULL = f"{path}/assets/data/df_sample_spec_full.fits"
+_VERS_PHOT = "DR3"
+_VERS_SPEC_PREV = "v1.3.0"
+_VERS_SPEC = "v1.3.1"
 
+path = pathlib.Path(__file__).parent.parent.resolve()
+_FNAME_DF_PHOT_INDEX = (
+    f"{path}/assets/data/df_sample_phot_index_{_VERS_SPEC}.fits"
+)
+_FNAME_DF_SPEC_INDEX = (
+    f"{path}/assets/data/df_sample_spec_index_{_VERS_SPEC}.fits"
+)
+_FNAME_DF_PHOT_FULL = (
+    f"{path}/assets/data/df_sample_phot_full_{_VERS_SPEC}.fits"
+)
+_FNAME_DF_SPEC_FULL = (
+    f"{path}/assets/data/df_sample_spec_full_{_VERS_SPEC}.fits"
+)
+
+
+if _INCLUDE_PREV:
+    _FNAME_DF_SPEC_INDEX_PREV = (
+        f"{path}/assets/data/df_sample_spec_index_{_VERS_SPEC_PREV}.fits"
+    )
+    _FNAME_DF_SPEC_FULL_PREV = (
+        f"{path}/assets/data/df_sample_spec_full_{_VERS_SPEC_PREV}.fits"
+    )
+else:
+    _FNAME_DF_SPEC_INDEX_PREV = None
+    _FNAME_DF_SPEC_FULL_PREV = None
+
+
+def preload_all_data():
     _ = global_store(_FNAME_DF_PHOT_INDEX)
     _ = global_store(_FNAME_DF_SPEC_INDEX)
     _ = global_store(_FNAME_DF_PHOT_FULL)
     _ = global_store(_FNAME_DF_SPEC_FULL)
+
+    if _INCLUDE_PREV:
+        _ = global_store(_FNAME_DF_SPEC_INDEX_PREV)
+        _ = global_store(_FNAME_DF_SPEC_FULL_PREV)
 
     return None

@@ -1,140 +1,23 @@
-import pathlib
-
 import dash
-import dash_ag_grid as dag
-from dash import html
+from .file_io import (
+    _FNAME_DF_SPEC_INDEX,
+    _VERS_SPEC,
+)
 
-from .utils_funcs import navbar_tables, make_headerbar, _DAG_STYLE
+from .utils_funcs import setup_all_spec_index, _PAGE_FLAVOR_SPEC_INDEX
 
-from .file_io import global_store, make_column_defs
-
-_PAGE_FLAVOR = "Spec Sample"
-_VERS = "v1.3"
-
-
-_DICT_TABLE_ENTRIES = {
-    "specid": {
-        "cellRenderer": "OverviewSpecLink",
-        "format": "d",
-    },
-    "id_DR3": {
-        "cellRenderer": "OverviewPhotLink",
-        "format": "d",
-    },
-    "z_spec": {
-        "format": "0.3f",
-    },
-    ####
-    "magF444W": {
-        "format": "0.2f",
-    },
-    "z_phot_50": {
-        "from": "sps",
-        "format": "0.3f",
-    },
-    "lmstar_50": {
-        "from": "sps",
-        "format": "0.2f",
-    },
-    "sfr100_50": {
-        "from": "sps",
-        "format": "0.2e",
-    },
-    "ssfr100_50": {
-        "from": "sps",
-        "format": "0.2e",
-    },
-    "mu_50": {
-        "from": "sps",
-        "format": "0.2f",
-    },
-    "use_phot": {
-        "from": "phot",
-    },
-    ####
-    "ra": {
-        "format": "0.8f",
-    },
-    "dec": {
-        "format": "0.8f",
-    },
-    "id_msa_epoch1": {
-        "format": "d",
-    },
-    "id_msa_epoch2": {
-        "format": "d",
-    },
-    "sep_DR3_epoch1": {
-        "format": "0.3f",
-    },
-    "sep_DR3_epoch2": {
-        "format": "0.3f",
-    },
-}
-for i in range(1, 10):
-    _DICT_TABLE_ENTRIES[f"mask{i}"] = {}
+_VERS = _VERS_SPEC
+_SPEC_PATH_EXTRA = ""
 
 
-path = pathlib.Path(__file__).parent.parent.resolve()
-_FNAME_DF = f"{path}/assets/data/df_sample_spec_index.fits"
+dash.register_page(
+    __name__,
+    path=f"/spec{_SPEC_PATH_EXTRA}/",
+    title=f"UNCOVER Data Viewer: {_PAGE_FLAVOR_SPEC_INDEX} {_VERS}",
+)
 
-
-def setup_all(
-    page_flavor=_PAGE_FLAVOR,
+layout = setup_all_spec_index(
     vers=_VERS,
-    fname_DF=_FNAME_DF,
-    dict_table_entries=_DICT_TABLE_ENTRIES,
-):
-    columnDefs = make_column_defs(dict_table_entries)
-    df = global_store(fname_DF)
-
-    dash.register_page(
-        __name__,
-        path="/spec/",
-        title=f"UNCOVER Data Viewer: {page_flavor} {vers}",
-    )
-
-    headerbar = make_headerbar(
-        h2_entry=[
-            html.A(
-                "UNCOVER",
-                href="https://jwst-uncover.github.io",
-            ),
-            f" Data Viewer: {page_flavor} {vers}",
-        ]
-    )
-
-    layout = html.Div(
-        [
-            html.Div(
-                headerbar,
-            ),
-            navbar_tables(),
-            dag.AgGrid(
-                id="sample",
-                rowData=df.to_dict("records"),
-                columnDefs=columnDefs,
-                defaultColDef={
-                    "resizable": True,
-                    "sortable": True,
-                    "filter": True,
-                },
-                style=_DAG_STYLE,
-                columnSize="autoSize",
-                columnSizeOptions={
-                    "keys": list(df.keys()),
-                    "skipHeader": False,
-                },
-                dashGridOptions={
-                    "rowSelection": "multiple",
-                    "suppressColumnVirtualisation": True,
-                },
-                className="ag-theme-quartz dbc-ag-grid",
-            ),
-        ]
-    )
-
-    return layout
-
-
-layout = setup_all()
+    fname_DF=_FNAME_DF_SPEC_INDEX,
+    spec_path_extra=_SPEC_PATH_EXTRA,
+)
