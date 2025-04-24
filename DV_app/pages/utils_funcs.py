@@ -12,6 +12,7 @@ from .file_io import (
     _VERS_PHOT,
     _FNAME_DF_SPEC_INDEX,
     _FNAME_DF_SPEC_FULL,
+    _INCLUDE_PREV,
 )
 
 
@@ -165,6 +166,19 @@ def make_headerbar(h2_entry=None):
 
 def navbar_home():
     ### Links / pseudo navbar
+    if _INCLUDE_PREV:
+        list_pages = [
+            "Index phot",
+            "Index spec",
+            "Index spec prev",
+        ]
+
+    else:
+        list_pages = [
+            "Index phot",
+            "Index spec",
+        ]
+
     return html.Div(
         [
             html.Div(
@@ -175,12 +189,7 @@ def navbar_home():
                 className="navbar",
             )
             for page in _LIST_PAGES
-            if page["name"]
-            in [
-                "Index phot",
-                "Index spec",
-                "Index spec prev",
-            ]
+            if page["name"] in list_pages
         ]
     )
 

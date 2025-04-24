@@ -14,6 +14,13 @@ from astropy.units import UnitsWarning
 warnings.simplefilter("ignore", category=UnitsWarning)
 
 
+_INCLUDE_PREV = os.environ.get("INCLUDE_PREV", "False")
+if _INCLUDE_PREV == "True":
+    _INCLUDE_PREV = True
+elif _INCLUDE_PREV == "False":
+    _INCLUDE_PREV = False
+
+
 def make_column_defs(dict_table_entries):
     columnDefs = []
 
@@ -121,12 +128,18 @@ _FNAME_DF_PHOT_FULL = (
 _FNAME_DF_SPEC_FULL = (
     f"{path}/assets/data/df_sample_spec_full_{_VERS_SPEC}.fits"
 )
-_FNAME_DF_SPEC_INDEX_PREV = (
-    f"{path}/assets/data/df_sample_spec_index_{_VERS_SPEC_PREV}.fits"
-)
-_FNAME_DF_SPEC_FULL_PREV = (
-    f"{path}/assets/data/df_sample_spec_full_{_VERS_SPEC_PREV}.fits"
-)
+
+
+if _INCLUDE_PREV:
+    _FNAME_DF_SPEC_INDEX_PREV = (
+        f"{path}/assets/data/df_sample_spec_index_{_VERS_SPEC_PREV}.fits"
+    )
+    _FNAME_DF_SPEC_FULL_PREV = (
+        f"{path}/assets/data/df_sample_spec_full_{_VERS_SPEC_PREV}.fits"
+    )
+else:
+    _FNAME_DF_SPEC_INDEX_PREV = None
+    _FNAME_DF_SPEC_FULL_PREV = None
 
 
 def preload_all_data():
@@ -134,7 +147,9 @@ def preload_all_data():
     _ = global_store(_FNAME_DF_SPEC_INDEX)
     _ = global_store(_FNAME_DF_PHOT_FULL)
     _ = global_store(_FNAME_DF_SPEC_FULL)
-    _ = global_store(_FNAME_DF_SPEC_INDEX_PREV)
-    _ = global_store(_FNAME_DF_SPEC_FULL_PREV)
+
+    if _INCLUDE_PREV:
+        _ = global_store(_FNAME_DF_SPEC_INDEX_PREV)
+        _ = global_store(_FNAME_DF_SPEC_FULL_PREV)
 
     return None
